@@ -22,7 +22,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #697184;
+  background-color:#0C090A ;
   height: 100vh;
 }
 
@@ -31,9 +31,10 @@ body {
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  background-color: #b1a6a4;
+  background-color:#3A3B3C;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+
 
 .input-group {
   margin-bottom: 10px;
@@ -60,4 +61,12 @@ button {
   border: none;
   border-radius: 3px;
   cursor: pointer;
+}
+.link-signin {
+  color: yellow;
+  transition: font-weight 0.3s;
+}
+
+.link-signin:hover {
+  font-weight: bold;
 }

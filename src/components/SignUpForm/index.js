@@ -1,5 +1,10 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "./index.css"; // You can create this CSS file to style your sign-up page
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import {collection,addDoc,serverTimestamp} from "firebase/firestore";
+import {db} from "../../firestore";
+
 
 function SignUpForm() {
   const [formData, setFormData] = useState({
@@ -13,7 +18,12 @@ function SignUpForm() {
     city: "",
     state: "",
     zip: "",
+    cart:[]
   });
+
+  const {signup} = useAuth()
+
+  const [status,setSignupStatus] = useState(false)
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,10 +33,49 @@ function SignUpForm() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const navigateToLogin = useNavigate();
+
+  useEffect(() => {
+    if (status) {
+      navigateToLogin("/login", { replace: true });
+    }
+  }, [status,navigateToLogin]);
+
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    console.log(formData); // You can handle form submission here
+
+    if(formData.password===formData.confirmPassword){
+      const userFormData = {firstName: formData.firstName,
+      lastName: formData.lastName,
+      email: formData.email,
+      phoneNumber: formData.phoneNumber,
+      address: formData.address,
+      city: formData.city,
+      state: formData.state,
+      zip: formData.zip,
+      cart:formData.cart,
+
+    }
+      signup(formData.email, formData.password)
+      .then(async() => {
+        try{
+          const docRef = await addDoc(collection(db,"users"),{...userFormData,timeStamp:serverTimestamp()});
+          console.log("Document written with ID ",docRef.id)
+        }catch(e){
+          console.error("Errpr adding document:  ",e)
+        }
+        setSignupStatus(true)
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        alert(errorMessage)
+      });
+    }else{
+      alert("passwords does not match")
+    }
   };
+
+  
 
   return (
     <div className="signup-container">

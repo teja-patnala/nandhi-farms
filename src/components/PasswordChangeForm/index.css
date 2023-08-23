@@ -23,14 +23,15 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #697184;
+  background-color:#0C090A ;
+  
 }
 
 .password-change-box {
   width: 400px;
   padding: 20px;
   border: 1px solid #ccc;
-  background-color: #b1a6a4;
+  background-color:#3A3B3C;
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }

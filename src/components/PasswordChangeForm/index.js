@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import "./index.css"; // You can create this CSS file to style your password change page
+import { useAuth } from "../../context/AuthContext";
+import Cookies from "js-cookie";
+
 
 function PasswordChangeForm() {
   const [formData, setFormData] = useState({
@@ -7,6 +10,10 @@ function PasswordChangeForm() {
     newPassword: "",
     confirmPassword: "",
   });
+ 
+  const {updatePassword} = useAuth()
+
+  const [result, setResult] = useState("")
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,8 +25,19 @@ function PasswordChangeForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData); // You can handle password change here
+    if(Cookies.get("nandhi-farms-access-token") !==undefined){
+      if (formData.newPassword === formData.confirmPassword){
+        updatePassword(formData.newPassword)
+        .then(() => {
+          setResult("password updated succesfully")
+        })
+        .catch((error) => {
+          console.log(error.message)
+        });
+      }
+    }
   };
+  
 
   return (
     <div className="password-change-container">
@@ -57,6 +75,7 @@ function PasswordChangeForm() {
             />
           </div>
           <button type="submit">Change Password</button>
+          <p style={{padding:"10px",textAlign:"center"}}>{result}</p>
         </form>
       </div>
     </div>
